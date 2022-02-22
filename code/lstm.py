@@ -81,7 +81,7 @@ def make_predictions(df):
         model.compile(optimizer='adam', loss='mse')
         
         dot_img_file = symbol+"_model.png"
-        #tf.keras.utils.plot_model(model, to_file=dot_img_file, show_shapes=True)
+        tf.keras.utils.plot_model(model, to_file=dot_img_file, show_shapes=True)
 
         
         # Fit the model
