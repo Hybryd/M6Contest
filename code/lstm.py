@@ -3,7 +3,7 @@
 
 # # Model : LTSM
 
-# In[1]:
+# In[2]:
 
 
 import pandas as pd
@@ -17,22 +17,22 @@ from tensorflow.keras.layers import LSTM, Dense
 pd.options.mode.chained_assignment = None 
 
 
-# In[2]:
+# In[5]:
 
 
 # Load data
 df = pd.read_csv("../data/ohlcv_m6.csv")
-#print(df)
+print(df[df["Symbol"]=="CARR"])
 
 
-# In[3]:
+# In[10]:
 
 
 def make_predictions(df):
     # PARAMETERS
-    split_percent = 0.99 # Split ratio for the train/test split
+    split_percent = 1 # Split ratio for the train/test split. Set to 1 if we do not test the model
     look_back = 15 # Look back for the LTSM
-    num_epochs = 1 # Number of epochs for the LTSM
+    num_epochs = 50 # Number of epochs for the LTSM
     num_prediction = 30 # Make forecast for the next month
     
     # Forecast dates
@@ -46,7 +46,7 @@ def make_predictions(df):
     # Get list of symbols
     symbols = pd.unique(df["Symbol"].values.ravel())
 
-    for symbol in symbols:
+    for symbol in ["CARR"]:#symbols:
         tf.keras.backend.clear_session()
         print(symbol)
         
@@ -63,12 +63,13 @@ def make_predictions(df):
         # Split
         split = int(split_percent*len(close_data))
         close_train = close_data[:split]
-        close_test = close_data[split:]
+        #close_test = close_data[split:]
         date_train = dataframe['Date'][:split]
-        date_test = dataframe['Date'][split:]
+        #date_test = dataframe['Date'][split:]
         
+        print(close_train)
         train_generator = TimeseriesGenerator(close_train, close_train, length=look_back, batch_size=20)
-        test_generator = TimeseriesGenerator(close_test, close_test, length=look_back, batch_size=1)
+        #test_generator = TimeseriesGenerator(close_test, close_test, length=look_back, batch_size=1)
 
         # Create the model (LTSM)
         model = Sequential()
@@ -88,11 +89,11 @@ def make_predictions(df):
         model.fit(train_generator, epochs=num_epochs, verbose=2)
         
         # Predictions
-        prediction = model.predict(test_generator)
+        #prediction = model.predict(test_generator)
 
         close_train = close_train.reshape((-1))
-        close_test = close_test.reshape((-1))
-        prediction = prediction.reshape((-1))
+        #close_test = close_test.reshape((-1))
+        #prediction = prediction.reshape((-1))
                 
         # Make prediction for the next month
         close_data = close_data.reshape((-1))
@@ -110,8 +111,8 @@ def make_predictions(df):
         
         # Transform results as dataframes
         df_train = pd.DataFrame({"Date":date_train,"Train" : close_train})
-        df_test = pd.DataFrame({"Date":date_test,"Test" : close_test})
-        df_prediction = pd.DataFrame({"Date":date_test[look_back:],"Prediction" : prediction})
+        #df_test = pd.DataFrame({"Date":date_test,"Test" : close_test})
+        #df_prediction = pd.DataFrame({"Date":date_test[look_back:],"Prediction" : prediction})
         df_forecast = pd.DataFrame({"Date":forecast_dates,"Forecast" : forecast})
         res[symbol] = forecast
         
@@ -120,7 +121,7 @@ def make_predictions(df):
         
 
 
-# In[4]:
+# In[11]:
 
 
 #df_train, df_test, df_prediction, df_forecast = make_predictions(df)
