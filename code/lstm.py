@@ -22,7 +22,7 @@ pd.options.mode.chained_assignment = None
 
 # Load data
 df = pd.read_csv("../data/ohlcv_m6.csv")
-print(df)
+#print(df)
 
 
 # In[3]:
@@ -31,8 +31,8 @@ print(df)
 def make_predictions(df):
     # PARAMETERS
     split_percent = 0.99 # Split ratio for the train/test split
-    look_back = 20 # Look back for the LTSM
-    num_epochs = 100 # Number of epochs for the LTSM
+    look_back = 15 # Look back for the LTSM
+    num_epochs = 1 # Number of epochs for the LTSM
     num_prediction = 30 # Make forecast for the next month
     
     # Forecast dates
@@ -80,8 +80,8 @@ def make_predictions(df):
         model.add(Dense(1))
         model.compile(optimizer='adam', loss='mse')
         
-        dot_img_file = symbol+"_model.png"
-        tf.keras.utils.plot_model(model, to_file=dot_img_file, show_shapes=True)
+        #dot_img_file = symbol+"_model.png"
+        #tf.keras.utils.plot_model(model, to_file=dot_img_file, show_shapes=True)
 
         
         # Fit the model
@@ -133,6 +133,16 @@ forecasts = make_predictions(df)
 #forecasts.plot(x="Date", y=list(forecasts.columns[1:]), label=list(forecasts.columns[1:]))
 #plt.show()
 forecasts.to_csv("forecasts.csv")
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
 
 
 
