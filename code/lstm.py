@@ -110,14 +110,17 @@ def make_predictions(df):
 
         
         # Transform results as dataframes
-        df_train = pd.DataFrame({"Date":date_train,"Train" : close_train})
+        #df_train = pd.DataFrame({"Date":date_train,"Train" : close_train})
         #df_test = pd.DataFrame({"Date":date_test,"Test" : close_test})
         #df_prediction = pd.DataFrame({"Date":date_test[look_back:],"Prediction" : prediction})
-        df_forecast = pd.DataFrame({"Date":forecast_dates,"Forecast" : forecast})
+        #df_forecast = pd.DataFrame({"Date":forecast_dates,"Forecast" : forecast})
         res[symbol] = forecast
         
+        # Save in each step of the for loop to make checkpoints
+        res.to_csv("forecasts.csv")
         
-    return res#df_train, df_test, df_prediction, df_forecast
+        
+    return res
         
         
 # In[11]:
@@ -132,7 +135,7 @@ forecasts = make_predictions(df)
 
 #forecasts.plot(x="Date", y=list(forecasts.columns[1:]), label=list(forecasts.columns[1:]))
 #plt.show()
-forecasts.to_csv("forecasts.csv")
+#forecasts.to_csv("forecasts.csv")
 
 
 # In[ ]:
