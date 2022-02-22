@@ -43,10 +43,10 @@ def make_predictions(df):
     res = pd.DataFrame()
     res["Date"] = forecast_dates
     
-    # Get list of symbols
-    symbols = pd.unique(df["Symbol"].values.ravel())
+    # Get list of assets
+    assets = pd.unique(df["Symbol"].values.ravel())
 
-    for symbol in ["CARR"]:#symbols:
+    for symbol in assets:
         tf.keras.backend.clear_session()
         print(symbol)
         
@@ -67,7 +67,7 @@ def make_predictions(df):
         date_train = dataframe['Date'][:split]
         #date_test = dataframe['Date'][split:]
         
-        print(close_train)
+        
         train_generator = TimeseriesGenerator(close_train, close_train, length=look_back, batch_size=20)
         #test_generator = TimeseriesGenerator(close_test, close_test, length=look_back, batch_size=1)
 
@@ -119,8 +119,7 @@ def make_predictions(df):
         
     return res#df_train, df_test, df_prediction, df_forecast
         
-
-
+        
 # In[11]:
 
 
